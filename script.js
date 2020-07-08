@@ -12,7 +12,6 @@ const zero = document.getElementById('zero');
 const decimal = document.getElementById('decimal'); 
 const numbersArray = [one, two, three, four, five, six, seven, eight, nine, zero, decimal];
 
-
 const multiply = document.getElementById('multiply');
 const divide = document.getElementById('divide');
 const subtract = document.getElementById('subtract');
@@ -74,9 +73,60 @@ const setOperatorIndex = () => {
     operatorIndex = display.innerHTML.length - 1;
 }
 
+const regex = /[0-9.]+|[+-/*]/g;
 
+let equationArray;
+console.log(equationArray);
 
+const calculateMultiplication = () => {
+    for (let i = 0; i < equationArray.length; i++) {
+        if (equationArray[i] === '*') {
+            equationArray.splice(i-1, 3, equationArray[i-1] * equationArray[i+1])
+            i--;
+        }
+    }
+};
 
+const calculateDivision = () => {
+    for (let i = 0; i < equationArray.length; i++) {
+        if (equationArray[i] === '/') {
+            equationArray.splice(i-1, 3, equationArray[i-1] / equationArray[i+1])
+            i--;
+        }
+    }
+};
+
+const calculateAddition = () => {
+    for (let i = 0; i < equationArray.length; i++) {
+        if (equationArray[i] === '+') {
+            equationArray.splice(i-1, 3, parseInt(equationArray[i-1], 10) + parseInt(equationArray[i+1], 10));
+            i--;
+        }
+    }
+};
+
+const calculateSubtraction = () => {
+    for (let i = 0; i < equationArray.length; i++) {
+        if (equationArray[i] === '-') {
+            equationArray.splice(i-1, 3, equationArray[i-1] - equationArray[i+1]);
+            i--;
+        }
+    }
+};
+
+const completeCalculation = () => {
+    equationArray = display.innerHTML.match(regex);
+    console.log(equationArray);
+    calculateMultiplication();
+    console.log(equationArray);
+    calculateDivision();
+    console.log(equationArray);
+    calculateSubtraction();
+    console.log(equationArray);
+    calculateAddition();
+    console.log(equationArray);
+    display.innerHTML = equationArray.join("");
+};
 
 
 numbersArray.forEach((number) => {number.addEventListener("click", displayButton)});
@@ -84,4 +134,6 @@ numbersArray.forEach((number) => {number.addEventListener("click", consecutiveZe
 operationsArray.forEach((element) => {element.addEventListener("click", consecutiveOperatorCheck)});
 operationsArray.forEach((element) => {element.addEventListener("click", displayButton)});
 operationsArray.forEach((element) => {element.addEventListener("click", setOperatorIndex)});
+
 clear.addEventListener("click", clearDisplay);
+equals.addEventListener('click', completeCalculation)
